@@ -15,9 +15,10 @@ function loadImage({ target }) {
   image.onload = () => {
     widthInput.value = image.width;
     heightInput.value = image.height;
-  }
+  };
 
-  
+  outputPath.innerText = path.join(os.homedir, 'imageresizer');
+
   form.classList.remove('hidden');
 }
 
