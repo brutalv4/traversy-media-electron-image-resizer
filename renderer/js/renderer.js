@@ -8,6 +8,16 @@ const widthInput = document.querySelector('#width');
 function loadImage({ target }) {
   const [file] = target.files;
   filename.innerText = file.name;
+
+  // Get original dimensions
+  const image = new Image();
+  image.src = URL.createObjectURL(file);
+  image.onload = () => {
+    widthInput.value = image.width;
+    heightInput.value = image.height;
+  }
+
+  
   form.classList.remove('hidden');
 }
 
