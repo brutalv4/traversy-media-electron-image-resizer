@@ -15,7 +15,7 @@ const createMainWindow = () => {
     mainWindow.webContents.openDevTools();
   }
 
-  mainWindow.loadFile(path.join(__dirname, 'renderer/image.html'));
+  mainWindow.loadFile(path.join(__dirname, 'renderer/index.html'));
 };
 
 app.on('activate', () => {
