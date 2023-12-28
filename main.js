@@ -18,10 +18,46 @@ const createMainWindow = () => {
   mainWindow.loadFile(path.join(__dirname, 'renderer/index.html'));
 };
 
+const createAboutWindow = () => {
+  const aboutWindow = new BrowserWindow({
+    title: 'About Image Resizer',
+    width: 300,
+    height: 300,
+  });
+
+  aboutWindow.loadFile(path.join(__dirname, 'renderer/about.html'));
+};
+
 const menu = [
+  ...(isMac
+    ? [
+        {
+          label: app.name,
+          submenu: [
+            {
+              label: 'About',
+              click: createAboutWindow,
+            },
+          ],
+        },
+      ]
+    : []),
   {
     role: 'fileMenu',
   },
+  ...(!isMac
+    ? [
+        {
+          label: 'Help',
+          submenu: [
+            {
+              label: 'About',
+              click: createAboutWindow,
+            },
+          ],
+        },
+      ]
+    : []),
 ];
 
 app.on('activate', () => {
