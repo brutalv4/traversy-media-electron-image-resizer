@@ -5,8 +5,8 @@ const filename = document.querySelector('#filename');
 const heightInput = document.querySelector('#height');
 const widthInput = document.querySelector('#width');
 
-function loadImage({ target }) {
-  const [file] = target.files;
+function loadImage() {
+  const [file] = imgInput.files;
   filename.innerText = file.name;
 
   // Get original dimensions
@@ -20,9 +20,34 @@ function loadImage({ target }) {
   outputPath.innerText = path.join(os.homedir, 'imageresizer');
 
   form.classList.remove('hidden');
-
-  alertSuccess('Hey');
 }
+
+function sendImage(e) {
+  e.preventDefault();
+
+  const [file] = imgInput.files;
+
+  if (!file) {
+    alertError('Please upload an image');
+    return;
+  }
+
+  const width = +widthInput.value;
+  const height = +heightInput.value;
+
+  if (!width || !height) {
+    alertError('Please fill in a height and width');
+    return;
+  }
+
+  const { path: src } = file;
+  const { innerText: dest } = outputPath;
+  ipcRenderer.send('image:resize', { src, dest, width, height });
+}
+
+ipcRenderer.on('image:done', () => {
+  alertSuccess(`Image resized to ${widthInput.value} x ${heightInput.value}`);
+});
 
 function alertError(message) {
   Toastify.toast({
@@ -51,3 +76,4 @@ function alertSuccess(message) {
 }
 
 imgInput.addEventListener('change', loadImage);
+form.addEventListener('submit', sendImage);
